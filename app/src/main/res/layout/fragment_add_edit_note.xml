@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/addNoteEditTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="EXAMPLE TITLE"/>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_below="@id/addNoteEditTextTitle"
+        android:layout_above="@id/backgroundRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:paddingTop="10dp"
+            android:layout_marginHorizontal="8dp"
+            android:id="@+id/addNoteEditTextNote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:text="EXAMPLE TEXT NOTE"/>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/addEditUpdateAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/backgroundRadioGroup"
+        android:layout_alignParentRight="true"
+        android:text=""/>
+
+    <RadioGroup
+        android:id="@+id/backgroundRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:checked="true"
+            android:id="@+id/radioButtonDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="White" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blue" />
+
+        <RadioButton
+            android:id="@+id/radioButtonGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Green" />
+
+        <RadioButton
+            android:id="@+id/radioButtonGray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gray" />
+    </RadioGroup>
+
+
+</RelativeLayout>
