@@ -7,7 +7,7 @@
         android:id="@+id/addNoteEditTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="EXAMPLE TITLE"/>
+        android:hint="TITLE"/>
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:text="EXAMPLE TEXT NOTE"/>
+            android:hint="NOTE"/>
     </ScrollView>
 
     <TextView

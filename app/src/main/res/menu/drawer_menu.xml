@@ -3,28 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="Menu">
-        <menu>
-            <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/navigation_notes"
-                android:icon="@drawable/icon_note"
-                android:title="Notes" />
-            <item
-                android:id="@+id/navigation_archives"
-                android:icon="@drawable/icon_archive"
-                android:title="Archive" />
-            </group>
-        </menu>
-    </item>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_notes"
+            android:icon="@drawable/icon_note"
+            android:title="Notes" />
+        <item
+            android:id="@+id/navigation_archives"
+            android:icon="@drawable/icon_archive"
+            android:title="Archive" />
+    </group>
 
 
     <item android:title="Preferences">
         <menu>
-            <item
-                android:id="@+id/navigation_settings"
-                android:icon="@drawable/icon_settings"
-                android:title="Settings" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/navigation_settings"
+                    android:icon="@drawable/icon_settings"
+                    android:title="Settings" />
+            </group>
         </menu>
     </item>
 </menu>

@@ -13,7 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 import com.example.note.MainActivity;
 import com.example.note.Model.Note;
 import com.example.note.Model.NoteDatabase;
@@ -21,6 +21,7 @@ import com.example.note.R;
 import com.example.note.RecylerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -33,6 +34,7 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
     RecyclerView recyclerView;
     SearchView search;
     FloatingActionButton btnAdd;
+    RecylerAdapter recylerAdapter;
     boolean isArchiveFragment;
 
     public static NotesFragment CreateArchiveList(){
@@ -64,12 +66,23 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+
                 return false;
+
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                return false;
+                List<Note> searchList = new ArrayList<>();
+                for (int i = 0; i < noteList.size(); i++){
+                    if (noteList.get(i).getTitle().toLowerCase().contains(s.toLowerCase())
+                            ||
+                            noteList.get(i).getNote().toLowerCase().contains(s.toLowerCase()) )
+                        searchList.add(noteList.get(i));
+
+                }
+                recylerAdapter.updateData(searchList);
+                return true;
             }
         });
     }
@@ -110,7 +123,7 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
 
     private void prepareNoteList(){
         noteList =  isArchiveFragment ? database.getAllNotes(true): database.getAllNotes(false);
-        RecylerAdapter recylerAdapter = new RecylerAdapter(noteList,this);
+        recylerAdapter = new RecylerAdapter(noteList,this);
         recyclerView.setAdapter(recylerAdapter);
         if (getViewMode() == "list" || getViewMode() == "")
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

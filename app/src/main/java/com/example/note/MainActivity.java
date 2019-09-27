@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         prepareToolbar();
         navigation.getMenu().getItem(0).setChecked(true);
         Fragment fragment = NotesFragment.CreateNotesList();
-        loadFragment(fragment);
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame,fragment).commit();
     }
 
     private void init(){

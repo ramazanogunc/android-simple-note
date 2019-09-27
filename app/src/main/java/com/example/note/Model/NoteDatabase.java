@@ -140,4 +140,16 @@ public class NoteDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db= this.getWritableDatabase();
         db.delete(TableName,"id = ?",new String[]{""+id});
     }
+
+    public void saveArchive(int id,boolean archiveStatus){
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues data = new ContentValues();
+        data.put(ColumnArchive,archiveStatus ? "1" : "0");
+        try {
+            db.update(TableName,data,"id = ?",new String[]{""+id});
+        } catch (Exception e){
+            Toast.makeText(context, "Note Delete Problem "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }

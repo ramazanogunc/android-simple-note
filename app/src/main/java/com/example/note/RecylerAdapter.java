@@ -62,6 +62,11 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.MyViewHo
 
     }
 
+    public void updateData(List<Note> searchNotes){
+        noteList = searchNotes;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return noteList.size();

@@ -76,19 +76,37 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
                     deleteNote();
                     break;
                 case R.id.menuDetailArchiveUnarchive:
+                    database.saveArchive(noteId,false);
+                    this.currentNote = database.getNote(noteId);
+                    getActivity().invalidateOptionsMenu();
                     break;
                 case R.id.menuDetailArchiveSave:
                     saveNote();
                     break;
             }
         }
-        else {
+        else if(editMode) {
             switch (item.getItemId()){
                 case R.id.menuDetailDelete:
                     deleteNote();
                     break;
                 case R.id.menuDetailArchive:
-
+                    database.saveArchive(noteId,true);
+                    this.currentNote = database.getNote(noteId);
+                    getActivity().invalidateOptionsMenu();
+                    break;
+                case R.id.menuDetailSave:
+                    saveNote();
+                    break;
+            }
+        }
+        else{
+            switch (item.getItemId()){
+                case R.id.menuDetailDelete:
+                    Toast.makeText(getActivity(), "There is not active Note", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.menuDetailArchive:
+                    Toast.makeText(getActivity(), "There is not active Note", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.menuDetailSave:
                     saveNote();
@@ -230,8 +248,6 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
             Toast.makeText(getActivity(), "There is not active Note", Toast.LENGTH_LONG).show();
         }
     }
-
-
 
     protected void setNoteId(int noteId){
         this.noteId = noteId;
