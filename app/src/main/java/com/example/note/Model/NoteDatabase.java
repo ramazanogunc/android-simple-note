@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NoteDatabase extends SQLiteOpenHelper {
@@ -53,6 +55,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         data.put(ColumnTitle,title);
         data.put(ColumnNote,note);
         data.put(ColumnColor,bgColor);
+        data.put("updated_at", System.currentTimeMillis() / 1000);
         try {
             db.insert(TableName,null,data);
             return true;
@@ -68,7 +71,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         data.put(ColumnTitle,title);
         data.put(ColumnNote,note);
         data.put(ColumnColor,bgColor);
-        //data.put("updated_at",System.currentTimeMillis());
+        data.put("updated_at", System.currentTimeMillis() / 1000);
         try {
             db.update(TableName,data,"id=?", new String[]{""+id});
             return true;
@@ -124,11 +127,10 @@ public class NoteDatabase extends SQLiteOpenHelper {
             note.setBgColor(cursor.getString(3));
             note.setArchive((cursor.getString(4)).equals("1"));
 
-            /*Timestamp ts=new Timestamp(cursor.getInt(5));
-            Date date= new Date(cursor.getString(5));
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss");
+            Date date= new Date(cursor.getLong(5)*1000);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm -- yyyy.MM.dd");
 
-            note.setUpdateAt(dateFormat.format(date));*/
+            note.setUpdateAt(dateFormat.format(date));
 
         } catch (Exception e){
             Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_LONG).show();
@@ -150,6 +152,5 @@ public class NoteDatabase extends SQLiteOpenHelper {
         } catch (Exception e){
             Toast.makeText(context, "Note Delete Problem "+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
     }
 }

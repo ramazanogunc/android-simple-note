@@ -154,7 +154,7 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
             title.setText(currentNote.getTitle());
             note.setText(currentNote.getNote());
             prepareBgColor(currentNote.getBgColor());
-            updateTime.setText(currentNote.getUpdateAt());
+            updateTime.setText("Last Updated : "+currentNote.getUpdateAt());
         }
 
     }
@@ -224,18 +224,23 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
             success = database.addNote(map.get("title"), map.get("note"), map.get("bgColor"));
         }
 
-        if (success && editMode)
+        if (success && editMode){
             Toast.makeText(getActivity(), "Note Updated", Toast.LENGTH_LONG).show();
-        else if (!success && editMode)
+            prepareAndShowData();
+        }
+        else if (!success && editMode){
             Toast.makeText(getActivity(), "Note did not Update", Toast.LENGTH_LONG).show();
+        }
         else if (success && !editMode){
             this.editMode = true;
             this.noteId = database.getLastSaveNoteId();
             this.currentNote = database.getNote(noteId);
             Toast.makeText(getActivity(), "New Note is Saved", Toast.LENGTH_LONG).show();
+            prepareAndShowData();
         }
-        else
+        else{
             Toast.makeText(getActivity(), "Note did not Save", Toast.LENGTH_LONG).show();
+        }
 
     }
 

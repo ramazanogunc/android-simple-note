@@ -20,10 +20,8 @@ import com.example.note.Model.NoteDatabase;
 import com.example.note.R;
 import com.example.note.RecylerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -125,7 +123,11 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
         noteList =  isArchiveFragment ? database.getAllNotes(true): database.getAllNotes(false);
         recylerAdapter = new RecylerAdapter(noteList,this);
         recyclerView.setAdapter(recylerAdapter);
-        if (getViewMode() == "list" || getViewMode() == "")
+        prepareLayoutManager();
+    }
+
+    private void prepareLayoutManager(){
+        if (new String("list").equals(getViewMode()))
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         else
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
