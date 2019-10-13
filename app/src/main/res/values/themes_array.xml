@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name=""
+    <string-array name="themes_array">
+        <item>Default</item>
+        <item>Blue</item>
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Green</item>
+        <item>Purple</item>
+    </string-array>
 </resources>

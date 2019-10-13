@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import com.example.note.MainActivity;
+import com.example.note.Activities.MainActivity;
 import com.example.note.Model.Note;
 import com.example.note.Model.NoteDatabase;
 import com.example.note.R;
@@ -118,24 +118,26 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        switch (radioGroup.getCheckedRadioButtonId()){
+        String color = "default";
+        switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.radioButtonDefault:
-                title.setBackgroundColor(Color.TRANSPARENT);
-                scrollView.setBackgroundColor(Color.TRANSPARENT);
+                color = "default";
                 break;
             case R.id.radioButtonBlue:
-                title.setBackgroundResource(R.color.blue);
-                scrollView.setBackgroundResource(R.color.blue);
+                color = "blue";
                 break;
             case R.id.radioButtonGreen:
-                title.setBackgroundResource(R.color.green);
-                scrollView.setBackgroundResource(R.color.green);
+                color = "green";
                 break;
             case R.id.radioButtonGray:
-                title.setBackgroundResource(R.color.gray);
-                scrollView.setBackgroundResource(R.color.gray);
+                color = "gray";
                 break;
         }
+        prepareBgColor(color);
+        if (editMode) {
+            database.saveNoteColor(noteId, color);
+        }
+
     }
 
     private void init(){

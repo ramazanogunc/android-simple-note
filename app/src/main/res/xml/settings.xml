@@ -3,4 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <PreferenceCategory
+        android:key="category_apperance"
+        android:title="Appearance">
+
+        <ListPreference
+            android:entries="@array/themes_array"
+            android:entryValues="@array/themes_array"
+            android:key="theme_color"
+            android:title="Theme Color" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="category_data"
+        android:title="Data">
+        <Preference
+            android:key="all_note_remove"
+            android:summary="All Notes, Exclude Archive"
+            android:title="All Note Remove" />
+        <Preference
+            android:key="all_arhive_remove"
+            android:summary="All Arhives, Exclude Notes"
+            android:title="All Arhive Remove" />
+        <Preference
+            android:key="all_data_remove"
+            android:summary="All Notes and Archive Notes"
+            android:title="All data Remove" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="category_security"
+        android:title="Security">
+        <SwitchPreference
+            android:key="pin_active"
+            android:title="Pin Active" />
+        <EditTextPreference
+            android:dependency="pin_active"
+            android:key="pin"
+            android:title="Pin" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="category_info"
+        android:title="Info">
+        <Preference
+            android:summary="1.0.0"
+            android:title="Version" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

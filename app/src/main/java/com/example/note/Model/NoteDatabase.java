@@ -80,6 +80,18 @@ public class NoteDatabase extends SQLiteOpenHelper {
             return false;
         }
     }
+    public void saveNoteColor(int id, String bgColor){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues data = new ContentValues();
+        data.put(ColumnColor,bgColor);
+        try {
+            db.update(TableName,data,"id=?", new String[]{""+id});
+
+        } catch (Exception e){
+            Toast.makeText(context, "Save Color problem "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 
 
@@ -152,5 +164,20 @@ public class NoteDatabase extends SQLiteOpenHelper {
         } catch (Exception e){
             Toast.makeText(context, "Note Delete Problem "+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void deleteAllNote(){
+        SQLiteDatabase db= this.getWritableDatabase();
+        db.delete(TableName,ColumnArchive+"= ?",new String[]{"0"});
+    }
+
+    public void deleteAllArhive(){
+        SQLiteDatabase db= this.getWritableDatabase();
+        db.delete(TableName,ColumnArchive+"= ?",new String[]{"1"});
+    }
+
+    public void deleteAll(){
+        SQLiteDatabase db= this.getWritableDatabase();
+        db.delete(TableName,null,null);
     }
 }

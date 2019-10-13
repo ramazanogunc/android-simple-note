@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:paddingVertical="40dp" xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:gravity="center_horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary">
+    android:background="?attr/colorPrimaryDark"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingVertical="40dp">
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/icon_note"/>
+        android:layout_marginTop="10dp"
+        android:background="@drawable/icon_note" />
 
     <TextView
-        android:layout_toRightOf="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/icon"
+        android:paddingVertical="10dp"
         android:text="NOTE"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:paddingVertical="10dp"/>
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

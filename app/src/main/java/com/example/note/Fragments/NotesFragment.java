@@ -1,6 +1,5 @@
 package com.example.note.Fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,15 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.widget.SearchView;
-import com.example.note.MainActivity;
+import com.example.note.Activities.MainActivity;
 import com.example.note.Model.Note;
 import com.example.note.Model.NoteDatabase;
+import com.example.note.Model.Settings;
 import com.example.note.R;
-import com.example.note.RecylerAdapter;
+import com.example.note.Model.RecylerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteListener,View.OnClickListener {
@@ -34,6 +33,7 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
     FloatingActionButton btnAdd;
     RecylerAdapter recylerAdapter;
     boolean isArchiveFragment;
+    Settings settings;
 
     public static NotesFragment CreateArchiveList(){
         NotesFragment fragment = new NotesFragment();
@@ -54,7 +54,6 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
         prepareNoteList();
         return rootView;
     }
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -90,11 +89,11 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
         switch (item.getItemId()){
             case R.id.menu_main_list:
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                saveViewMode("list");
+                settings.setViewMode("list");
                 break;
             case R.id.menu_main_grid:
                 recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-                saveViewMode("grid");
+                settings.setViewMode("grid");
                 break;
         }
         return true;
@@ -114,8 +113,14 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
     private void init(){
         recyclerView = rootView.findViewById(R.id.notesRecycler);
         btnAdd = rootView.findViewById(R.id.btnAddNote);
-        btnAdd.setOnClickListener(this);
+        if( isArchiveFragment ){
+            btnAdd.hide();
+        }
+        else{
+            btnAdd.setOnClickListener(this);
+        }
         database = new NoteDatabase(getActivity());
+        settings = new Settings(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -127,23 +132,11 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
     }
 
     private void prepareLayoutManager(){
-        if (new String("list").equals(getViewMode()))
+        if (new String("list").equals(settings.getViewMode()))
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         else
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
     }
-
-    private void saveViewMode(String mode){
-        SharedPreferences.Editor editor = getActivity().getSharedPreferences("viewMode", MODE_PRIVATE).edit();
-        editor.putString("mode",mode);
-        editor.commit();
-    }
-
-    private String getViewMode(){
-        SharedPreferences preferences = getActivity().getSharedPreferences("viewMode", MODE_PRIVATE);
-        return preferences.getString("mode", "");
-    }
-
 
 }

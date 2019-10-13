@@ -3,9 +3,24 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorPrimaryLight">#02B49F</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#E91E63</color>
     <color name="blue">#2196F3</color>
     <color name="green">#4CAF50</color>
     <color name="gray">#5A5A5A</color>
+    <color name="themeBlue">#0073C7</color>
+    <color name="themeBlueLight">#0092FA</color>
+    <color name="themeBlueSeconday">#FF9800</color>
+    <color name="themeRed">#E00000</color>
+    <color name="themeRedLight">#FD3434</color>
+    <color name="themeRedSecondary">#8BC34A</color>
+    <color name="themeOrange">#E24100</color>
+    <color name="themeOrangeLight">#F87B26</color>
+    <color name="themeOrangeSecondary">#009688</color>
+    <color name="themeGreen">#008577</color>
+    <color name="themeGreenLight">#02B49F</color>
+    <color name="themeGreenSecondary">#E91E63</color>
+    <color name="themePurple">#A922FF</color>
+    <color name="themePurpleLight">#C255FA</color>
+    <color name="themePurpleSecondary">#FFEB3B</color>
 
 </resources>

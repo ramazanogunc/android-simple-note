@@ -7,6 +7,7 @@
         android:id="@+id/addNoteEditTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="13dp"
         android:hint="TITLE"/>
 
     <ScrollView
@@ -31,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/backgroundRadioGroup"
         android:layout_alignParentRight="true"
+        android:textSize="13sp"
         android:text=""/>
 
     <RadioGroup

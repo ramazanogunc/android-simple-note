@@ -1,4 +1,4 @@
-package com.example.note;
+package com.example.note.Model;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.note.Model.Note;
+import com.example.note.R;
 import java.util.List;
 
 public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.MyViewHolder> {
