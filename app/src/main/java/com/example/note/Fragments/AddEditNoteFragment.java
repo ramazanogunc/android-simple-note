@@ -15,7 +15,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import com.example.note.Activities.MainActivity;
 import com.example.note.Model.Note;
 import com.example.note.Model.NoteDatabase;
@@ -33,111 +35,18 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
     NoteDatabase database;
     Note currentNote;
 
-    public static AddEditNoteFragment CreateAddNoteFragment(){
-        AddEditNoteFragment fragment = new AddEditNoteFragment();
-        fragment.setEditMode(false);
-        return fragment;
-    }
-
-    public static AddEditNoteFragment CreateEditNoteFragment(int noteId){
-        AddEditNoteFragment fragment = new AddEditNoteFragment();
-        fragment.setEditMode(true);
-        fragment.setNoteId(noteId);
-        return fragment;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_add_edit_note, container, false);
+        return inflater.inflate(R.layout.fragment_add_edit_note, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rootView = view;
         init();
-        database = new NoteDatabase(getActivity());
-        if (editMode){
-            prepareAndShowData();
-        }
-        return rootView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        if (editMode && currentNote.isArchive())
-            ((MainActivity)getActivity()).getMenuInflater().inflate(R.menu.menu_detail_archive, menu);
-        else
-            ((MainActivity)getActivity()).getMenuInflater().inflate(R.menu.menu_detail, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (editMode && currentNote.isArchive()){
-            switch (item.getItemId()){
-                case R.id.menuDetailArchiveDelete:
-                    deleteNote();
-                    break;
-                case R.id.menuDetailArchiveUnarchive:
-                    database.saveArchive(noteId,false);
-                    this.currentNote = database.getNote(noteId);
-                    getActivity().invalidateOptionsMenu();
-                    break;
-                case R.id.menuDetailArchiveSave:
-                    saveNote();
-                    break;
-            }
-        }
-        else if(editMode) {
-            switch (item.getItemId()){
-                case R.id.menuDetailDelete:
-                    deleteNote();
-                    break;
-                case R.id.menuDetailArchive:
-                    database.saveArchive(noteId,true);
-                    this.currentNote = database.getNote(noteId);
-                    getActivity().invalidateOptionsMenu();
-                    break;
-                case R.id.menuDetailSave:
-                    saveNote();
-                    break;
-            }
-        }
-        else{
-            switch (item.getItemId()){
-                case R.id.menuDetailDelete:
-                    Toast.makeText(getActivity(), "There is not active Note", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.menuDetailArchive:
-                    Toast.makeText(getActivity(), "There is not active Note", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.menuDetailSave:
-                    saveNote();
-                    break;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        String color = "default";
-        switch (radioGroup.getCheckedRadioButtonId()) {
-            case R.id.radioButtonDefault:
-                color = "default";
-                break;
-            case R.id.radioButtonBlue:
-                color = "blue";
-                break;
-            case R.id.radioButtonGreen:
-                color = "green";
-                break;
-            case R.id.radioButtonGray:
-                color = "gray";
-                break;
-        }
-        prepareBgColor(color);
-        if (editMode) {
-            database.saveNoteColor(noteId, color);
-        }
-
     }
 
     private void init(){
@@ -148,9 +57,25 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
         scrollView = rootView.findViewById(R.id.scrollView);
         radioGroupBackground.setOnCheckedChangeListener(this);
         setHasOptionsMenu(true);
+        database = new NoteDatabase(getActivity());
+        decideAddOrEditMode();
+    }
+
+    private void decideAddOrEditMode(){
+        if (getArguments() != null){
+            this.noteId = getArguments().getInt("id");
+            this.editMode = true;
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle("Edit Note");
+            prepareAndShowData();
+        }
+        else{
+            this.editMode = false;
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle("Add Note");
+        }
     }
 
     public void prepareAndShowData(){
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Edit Note");
         currentNote = database.getNote(noteId);
         if (currentNote != null){
             title.setText(currentNote.getTitle());
@@ -158,7 +83,6 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
             prepareBgColor(currentNote.getBgColor());
             updateTime.setText("Last Updated : "+currentNote.getUpdateAt());
         }
-
     }
 
     public void prepareBgColor(String color){
@@ -256,10 +180,86 @@ public class AddEditNoteFragment extends Fragment implements RadioGroup.OnChecke
         }
     }
 
-    protected void setNoteId(int noteId){
-        this.noteId = noteId;
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        if (editMode && currentNote.isArchive())
+            ((MainActivity)getActivity()).getMenuInflater().inflate(R.menu.menu_detail_archive, menu);
+        else
+            ((MainActivity)getActivity()).getMenuInflater().inflate(R.menu.menu_detail, menu);
     }
-    protected void setEditMode(boolean editMode){
-        this.editMode = editMode;
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (editMode && currentNote.isArchive()){
+            switch (item.getItemId()){
+                case R.id.menuDetailArchiveDelete:
+                    deleteNote();
+                    Navigation.findNavController(rootView).popBackStack(R.id.navigation_notes,false);
+                    break;
+                case R.id.menuDetailArchiveUnarchive:
+                    database.saveArchive(noteId,false);
+                    this.currentNote = database.getNote(noteId);
+                    getActivity().invalidateOptionsMenu();
+                    break;
+                case R.id.menuDetailArchiveSave:
+                    saveNote();
+                    break;
+            }
+        }
+        else if(editMode) {
+            switch (item.getItemId()){
+                case R.id.menuDetailDelete:
+                    deleteNote();
+                    Navigation.findNavController(rootView).popBackStack(R.id.navigation_notes,false);
+                    break;
+                case R.id.menuDetailArchive:
+                    database.saveArchive(noteId,true);
+                    this.currentNote = database.getNote(noteId);
+                    getActivity().invalidateOptionsMenu();
+                    break;
+                case R.id.menuDetailSave:
+                    saveNote();
+                    break;
+            }
+        }
+        else{
+            switch (item.getItemId()){
+                case R.id.menuDetailDelete:
+                    Toast.makeText(getActivity(), "There is not active Note", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.menuDetailArchive:
+                    Toast.makeText(getActivity(), "There is not active Note", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.menuDetailSave:
+                    saveNote();
+                    break;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        String color = "default";
+        switch (radioGroup.getCheckedRadioButtonId()) {
+            case R.id.radioButtonDefault:
+                color = "default";
+                break;
+            case R.id.radioButtonBlue:
+                color = "blue";
+                break;
+            case R.id.radioButtonGreen:
+                color = "green";
+                break;
+            case R.id.radioButtonGray:
+                color = "gray";
+                break;
+        }
+        prepareBgColor(color);
+        if (editMode) {
+            database.saveNoteColor(noteId, color);
+        }
+
     }
 }

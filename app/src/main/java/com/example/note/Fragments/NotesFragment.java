@@ -2,7 +2,9 @@ package com.example.note.Fragments;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,24 +37,51 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
     boolean isArchiveFragment;
     Settings settings;
 
-    public static NotesFragment CreateArchiveList(){
-        NotesFragment fragment = new NotesFragment();
-        fragment.isArchiveFragment = true;
-        return fragment;
-    }
-
-    public static NotesFragment CreateNotesList(){
-        NotesFragment fragment = new NotesFragment();
-        fragment.isArchiveFragment = false;
-        return fragment;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_notes, container, false);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_notes, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rootView = view;
         init();
         prepareNoteList();
-        return rootView;
+        prepareLayoutManager();
+    }
+
+    private void init(){
+        recyclerView = rootView.findViewById(R.id.notesRecycler);
+        btnAdd = rootView.findViewById(R.id.btnAddNote);
+        database = new NoteDatabase(getActivity());
+        settings = new Settings(getActivity());
+        setHasOptionsMenu(true);
+        decideNormalOrArchive();
+    }
+
+    private void decideNormalOrArchive(){
+        if (getArguments() != null){
+            this.isArchiveFragment = true;
+            btnAdd.hide();
+        }
+        else{
+            this.isArchiveFragment = false;
+            btnAdd.setOnClickListener(this);
+        }
+    }
+
+    private void prepareNoteList(){
+        noteList =  isArchiveFragment ? database.getAllNotes(true): database.getAllNotes(false);
+        recylerAdapter = new RecylerAdapter(noteList,this);
+        recyclerView.setAdapter(recylerAdapter);
+    }
+
+    private void prepareLayoutManager(){
+        if (settings.getViewMode().equals("list"))
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        else
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
     }
 
     @Override
@@ -102,41 +131,16 @@ public class NotesFragment extends Fragment implements RecylerAdapter.OnNoteList
     @Override
     public void onNoteClick(int position) {
         Integer id = noteList.get(position).getId();
-        ((MainActivity)getActivity()).loadFragment(AddEditNoteFragment.CreateEditNoteFragment(id));
+        Bundle bundle = new Bundle();
+        bundle.putInt("id",id);
+        Navigation.findNavController(rootView)
+                .navigate(R.id.action_notesFragment_to_addEditNoteFragment,bundle);
     }
 
     @Override
     public void onClick(View view) {
-        ((MainActivity)getActivity()).loadFragment(AddEditNoteFragment.CreateAddNoteFragment());
-    }
-
-    private void init(){
-        recyclerView = rootView.findViewById(R.id.notesRecycler);
-        btnAdd = rootView.findViewById(R.id.btnAddNote);
-        if( isArchiveFragment ){
-            btnAdd.hide();
-        }
-        else{
-            btnAdd.setOnClickListener(this);
-        }
-        database = new NoteDatabase(getActivity());
-        settings = new Settings(getActivity());
-        setHasOptionsMenu(true);
-    }
-
-    private void prepareNoteList(){
-        noteList =  isArchiveFragment ? database.getAllNotes(true): database.getAllNotes(false);
-        recylerAdapter = new RecylerAdapter(noteList,this);
-        recyclerView.setAdapter(recylerAdapter);
-        prepareLayoutManager();
-    }
-
-    private void prepareLayoutManager(){
-        if (new String("list").equals(settings.getViewMode()))
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        else
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-
+        Navigation.findNavController(rootView)
+                .navigate(R.id.action_notesFragment_to_addEditNoteFragment);
     }
 
 }

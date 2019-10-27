@@ -26,7 +26,6 @@ public class RecylerAdapter extends RecyclerView.Adapter<RecylerAdapter.MyViewHo
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.note_list_item, parent, false);
-
         MyViewHolder viewHolder = new MyViewHolder(view ,onNoteListener);
         return viewHolder;
     }

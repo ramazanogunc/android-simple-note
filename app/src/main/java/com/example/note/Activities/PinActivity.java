@@ -1,7 +1,6 @@
 package com.example.note.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -50,7 +49,7 @@ public class PinActivity extends AppCompatActivity {
         String pin = editTextPin.getText().toString();
         String truePin = settings.getPin();
 
-        if (new String(pin).equals(truePin)) {
+        if (pin.equals(truePin)) {
             goNotesActivity();
         } else {
             Toast.makeText(this, "Wrong Pin", Toast.LENGTH_LONG).show();

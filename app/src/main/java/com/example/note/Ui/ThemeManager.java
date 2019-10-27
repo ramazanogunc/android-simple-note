@@ -27,6 +27,7 @@ public class ThemeManager {
                 ((MainActivity)context).setTheme(R.style.ThemeRed);
                 break;
             case "Orange":
+                ((MainActivity)context).setTheme(R.style.ThemeOrange);
                 break;
             case "Green":
                 ((MainActivity)context).setTheme(R.style.ThemeGreen);
